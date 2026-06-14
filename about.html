@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>[YOUR NAME] — About</title>
+<title>Thành Lâm — About</title>
 <style>
   @font-face {
     font-family: 'Orpheus Pro';
@@ -25,7 +25,7 @@
     --accent:  oklch(58% 0.24 264);
     --font-display: 'Orpheus Pro', 'Iowan Old Style', 'Charter', Georgia, serif;
     --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    --font-mono: ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+    --font-mono: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   }
   html { color-scheme: dark; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,8 +42,8 @@
 
   /* — nav — */
   nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-        padding: 1.5rem 2.5rem; font-family: var(--font-mono); font-size: 0.75rem;
-        letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 1.5rem 2.5rem; font-family: var(--font-body); font-size: 0.75rem;
+        letter-spacing: -0.015em; text-transform: uppercase;
         border-bottom: 1px solid var(--border); position: sticky; top: 0;
         background: var(--bg); z-index: 100; }
   nav .logo { height: 28px; width: auto; flex-shrink: 0; justify-self: start; }
@@ -87,7 +87,7 @@
 
   /* — page header — */
   .page-header { padding: 6rem 2.5rem 3rem; border-bottom: 1px solid var(--border); }
-  .page-header h1 { font-family: var(--font-display); font-weight: 400;
+  .page-header h1 { font-family: var(--font-body); font-weight: 400;
                      font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.1;
                      letter-spacing: -0.02em; }
 
@@ -110,7 +110,7 @@
                                 color: var(--muted); position: relative; padding: 0 1rem; text-align: center; }
   .about-photo figcaption { margin-top: 0.7rem; font-family: var(--font-mono);
                             font-size: 0.68rem; text-transform: uppercase;
-                            letter-spacing: 0.07em; color: var(--muted); }
+                            letter-spacing: -0.015em; color: var(--muted); }
 
   .about-divider { width: 1px; align-self: stretch; background: var(--border); }
 
@@ -125,14 +125,14 @@
 
   .stats { display: flex; gap: 3rem; margin-top: 2.5rem;
            font-family: var(--font-mono); font-size: 0.7rem;
-           text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+           text-transform: uppercase; letter-spacing: -0.015em; color: var(--muted); }
   .stats .num { display: block; font-size: 1.8rem; color: var(--fg);
-                font-family: var(--font-display); font-weight: 400;
+                font-family: var(--font-body); font-weight: 400;
                 margin-bottom: 0.2rem; letter-spacing: -0.02em; }
 
   .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
   .cap-item { padding: 1.2rem 0; border-bottom: 1px solid color-mix(in oklch, var(--border) 25%, transparent); }
-  .cap-item h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.15rem;
+  .cap-item h3 { font-family: var(--font-body); font-weight: 400; font-size: 1.15rem;
                   margin-bottom: 0.4rem; }
   .cap-item p { font-size: 0.85rem; color: var(--muted); max-width: 400px; line-height: 1.6; }
 
@@ -143,13 +143,13 @@
   .xp-row .role b { font-weight: 600; font-size: 0.95rem; display: block; }
   .xp-row .role span { font-size: 0.84rem; color: var(--muted); }
   .xp-row .org { font-family: var(--font-mono); font-size: 0.72rem;
-                  text-transform: uppercase; letter-spacing: 0.06em; }
+                  text-transform: uppercase; letter-spacing: -0.015em; }
 
   /* — footer — */
   footer { display: flex; justify-content: space-between; align-items: baseline;
            padding: 2rem 2.5rem; border-top: 1px solid var(--border); margin-top: 4rem;
            font-family: var(--font-mono); font-size: 0.7rem;
-           text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+           text-transform: uppercase; letter-spacing: -0.015em; color: var(--muted); }
   footer .links { display: flex; gap: 2rem; }
   footer a { transition: color 0.2s; }
   footer a:hover { color: var(--accent); }
@@ -171,11 +171,59 @@
   }
 
   /* — accent-sync — */
-  nav { border-top: 3px solid var(--accent); transition: border-color 0.45s ease; }
+  nav { border-top: 1px solid #fff; transition: border-color 0.45s ease; }
   nav a, footer a { transition: color 0.45s ease; }
+  .about-block h2 { color: var(--accent); transition: color 0.45s ease; }
+
+  /* — intro / loading screen ————————————————— */
+  html.intro-lock, html.intro-lock body { overflow: hidden; }
+  .intro-done .intro { display: none !important; }
+  .intro { position: fixed; inset: 0; background: #000000; z-index: 9999;
+           display: grid; place-items: center; overflow: hidden;
+           transform: translateY(0); will-change: transform;
+           transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1); }
+  .intro.is-ready { cursor: pointer; }
+  .intro.is-hiding { transform: translateY(-100%); pointer-events: none; }
+  .intro-stage { position: relative; display: grid; place-items: center; }
+  .intro-fish { display: block; width: clamp(150px, 20vw, 290px); height: auto;
+                position: relative; z-index: 1; will-change: transform;
+                transform: translate(-125vw, 0);
+                animation: intro-swim 4s cubic-bezier(0.34, 0.02, 0.18, 1) forwards; }
+  .intro-logo { position: absolute; top: 50%; right: calc(100% + clamp(24px, 4.5vw, 70px));
+                transform: translateY(-50%); height: clamp(38px, 5.5vw, 68px); width: auto;
+                z-index: 2; opacity: 0; animation: intro-fade 1.3s ease 4s forwards; }
+  .intro-cta { position: absolute; top: 50%; left: calc(100% + clamp(24px, 4.5vw, 70px));
+               transform: translateY(-50%); white-space: nowrap; z-index: 2; opacity: 0;
+               font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: -0.015em;
+               text-transform: uppercase; color: #fff;
+               animation: intro-fade 1.3s ease 4.35s forwards; }
+  @keyframes intro-swim {
+    0%   { transform: translate(-125vw, 0); }
+    18%  { transform: translate(-92vw, -10px); }
+    34%  { transform: translate(-64vw,  10px); }
+    50%  { transform: translate(-40vw, -10px); }
+    66%  { transform: translate(-20vw,   9px); }
+    82%  { transform: translate(-6vw,   -6px); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes intro-fade  { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 720px) {
+    .intro-stage { transform: scale(0.7); }
+    .intro-cta { letter-spacing: -0.015em; }
+  }
 </style>
+<script>try{if(sessionStorage.getItem('intro-seen'))document.documentElement.classList.add('intro-done');}catch(e){}</script>
 </head>
 <body>
+
+<!-- ——— INTRO / LOADING SCREEN ——— -->
+<div class="intro" id="intro" role="dialog" aria-label="Enter site — click to turn on sound">
+  <div class="intro-stage">
+    <img class="intro-logo" src="mqaj3roz-logo-light.svg" alt="Thanh Lam">
+    <img class="intro-fish" src="mqe17s8k-loading-fish.gif" alt="" aria-hidden="true">
+    <span class="intro-cta">[ Click to turn on sound ]</span>
+  </div>
+</div>
 
 <nav>
   <img class="logo" src="mqaj3roz-logo-light.svg" alt="Logo">
@@ -193,19 +241,15 @@
 </nav>
 <div id="view" data-route="about">
 
-<section class="page-header">
-  <h1>About</h1>
-</section>
-
 <div class="about-content">
   <div class="about-layout">
 
     <div class="about-photo">
       <figure>
-        <!-- Replace .photo-ph with: <img src="YOUR-FILE.png" alt="[Your Name]"> -->
+        <!-- Replace .photo-ph with: <img src="YOUR-FILE.png" alt="Thành Lâm"> -->
         <div class="photo-ph"><span>YOUR PHOTO — 2:3 PORTRAIT</span></div>
       </figure>
-      <figcaption>[Your Name]</figcaption>
+      <figcaption>Thành Lâm — Multidisciplinary Designer</figcaption>
     </div>
 
     <div class="about-divider" aria-hidden="true"></div>
@@ -215,30 +259,37 @@
       <section class="about-block">
         <h2>Background</h2>
         <p>
-          [2-3 sentences about your background, philosophy, and what drives your work.
-          Replace this placeholder with real copy -- an honest stub beats a fake bio.]
+          I'm Thành Lâm — a multidisciplinary designer and marketer based in Vietnam,
+          trained in Marketing at British University Vietnam. I build brands from the
+          name up: identity, print, packaging, interface, and the campaign that carries
+          them. One mind across the whole stack means nothing gets lost in the handoff.
         </p>
         <p>
-          [Second paragraph: what you believe about brand-building, the kinds of
-          clients/categories you've worked across, your approach to creative leadership.]
+          I came up through marketing, so I never design in a vacuum — every mark,
+          layout, and frame is built to move a real audience. I've shaped identities
+          across environmental tech, beauty, hospitality, and student culture, and I
+          sweat the details most people never notice. That's usually where the work
+          earns its keep.
         </p>
         <div class="stats">
-          <div><span class="num">--</span> Years experience</div>
-          <div><span class="num">--</span> Brands built</div>
-          <div><span class="num">--</span> Awards</div>
+          <div><span class="num">6</span> Creative disciplines</div>
+          <div><span class="num">10+</span> Brands &amp; projects</div>
+          <div><span class="num">7.5</span> IELTS — fluent English</div>
         </div>
       </section>
 
       <section class="about-block">
         <h2>Philosophy</h2>
         <p>
-          [What you believe about the intersection of marketing and design.
-          How you approach building brand worlds. Your point of view on what makes
-          creative work effective -- not just beautiful.]
+          Design and marketing aren't two jobs to me — they're one. A logo that doesn't
+          sell is decoration; a campaign without craft is noise. I build the whole world
+          a brand lives in, then make sure it actually performs.
         </p>
         <p>
-          [Optional: personal note -- where you're based, what you do outside work,
-          how your diverse skill set came together.]
+          My range is the point: branding, print, UI/UX, photography, film, illustration.
+          When I'm not designing I'm behind a camera or in the edit — chasing the kind of
+          detail that turns a nice idea into one people remember. I'm early in the career,
+          fast on the tools, and never satisfied with "good enough."
         </p>
       </section>
 
@@ -246,28 +297,28 @@
         <h2>Capabilities</h2>
         <div class="cap-grid">
           <div class="cap-item">
-            <h3>Brand Strategy</h3>
-            <p>[Positioning, naming, brand architecture, competitive analysis -- replace with your specifics.]</p>
+            <h3>Brand Identity</h3>
+            <p>Logos, naming and full brand systems — from Biolotus to Fae Beauty. The complete visual language a brand speaks in, documented in guidelines.</p>
           </div>
           <div class="cap-item">
-            <h3>Creative Direction</h3>
-            <p>[Campaign concepting, art direction, visual systems, tone of voice -- replace with your specifics.]</p>
+            <h3>Print &amp; Packaging</h3>
+            <p>Brochures, booklets, info sheets, labels and packaging — built for the shelf and the signing table alike.</p>
+          </div>
+          <div class="cap-item">
+            <h3>UI/UX &amp; Web</h3>
+            <p>Interface design and front-end build — including the TEDxBUV site, designed and coded end to end.</p>
           </div>
           <div class="cap-item">
             <h3>Photography</h3>
-            <p>[Product, lifestyle, campaign stills, post-production direction -- replace with your specifics.]</p>
+            <p>Product, campaign and editorial stills. Competition work for Campari's "Born in Red" and the powerlifting series "Suspended Tension."</p>
           </div>
           <div class="cap-item">
-            <h3>Film &amp; Directing</h3>
-            <p>[Commercial, brand film, social content, production oversight -- replace with your specifics.]</p>
+            <h3>Film &amp; Editing</h3>
+            <p>Short-form and social video, shot and cut in CapCut. Story first, polish second.</p>
           </div>
           <div class="cap-item">
-            <h3>Campaign Planning</h3>
-            <p>[Integrated campaigns, media strategy, launch sequencing, budgets -- replace with your specifics.]</p>
-          </div>
-          <div class="cap-item">
-            <h3>Design</h3>
-            <p>[Identity systems, packaging, key visuals, digital design -- replace with your specifics.]</p>
+            <h3>Illustration &amp; Merch</h3>
+            <p>Character-driven illustration and merchandise — the "Merit Christmas" apparel line, keychains, totes and arcade-style gift sets.</p>
           </div>
         </div>
       </section>
@@ -275,19 +326,19 @@
       <section class="about-block">
         <h2>Experience</h2>
         <div class="xp-row">
-          <span class="when">2023 -- now</span>
-          <div class="role"><b>[Title, e.g. Creative Marketing Director]</b><span>[One line on scope: team size, categories, remit.]</span></div>
-          <span class="org">[Company]</span>
+          <span class="when">2024 — 2025</span>
+          <div class="role"><b>Brand &amp; Print Designer</b><span>Built the "Biolotus" brand identity; led large-format and print design for events — signing ceremonies, launches — plus brochures, booklets and packaging.</span></div>
+          <span class="org">CTCEnvi</span>
         </div>
         <div class="xp-row">
-          <span class="when">2020 -- 2023</span>
-          <div class="role"><b>[Title]</b><span>[One line on scope.]</span></div>
-          <span class="org">[Company]</span>
+          <span class="when">2024</span>
+          <div class="role"><b>Packaging &amp; Ads Designer</b><span>Designed product packaging and labels; planned and ran Facebook Ads for resort branches in Phú Yên and Mũi Né.</span></div>
+          <span class="org">Mandala Hotel</span>
         </div>
         <div class="xp-row">
-          <span class="when">2017 -- 2020</span>
-          <div class="role"><b>[Title]</b><span>[One line on scope.]</span></div>
-          <span class="org">[Company]</span>
+          <span class="when">2021</span>
+          <div class="role"><b>UI/UX Designer &amp; Developer</b><span>Designed and coded tedxbuv.com; built the media calendar and social campaign with the team.</span></div>
+          <span class="org">TEDxBUV</span>
         </div>
       </section>
 
@@ -372,6 +423,32 @@
   window.addEventListener('pagehide', persist);
 
   if(wantPlay){ audio.play().then(sync).catch(sync); } else { sync(); }
+})();
+</script>
+<script>
+(function(){
+  var intro = document.getElementById('intro');
+  if(!intro) return;
+  var html = document.documentElement;
+  // Already entered this browser session → never replay the intro.
+  if(html.classList.contains('intro-done')){ if(intro.parentNode) intro.parentNode.removeChild(intro); return; }
+  html.classList.add('intro-lock');                 // lock scroll behind the overlay
+  var ready = false;
+  // Fish reaches center at 4s; logo + CTA finish fading in shortly after.
+  setTimeout(function(){ ready = true; intro.classList.add('is-ready'); }, 4700);
+  function enter(){
+    if(!ready) return;                              // ignore clicks before the CTA appears
+    intro.removeEventListener('click', enter);
+    intro.classList.add('is-hiding');
+    html.classList.remove('intro-lock');
+    try { sessionStorage.setItem('intro-seen','1'); } catch(e){}
+    // Start the song — runs inside the click gesture, so audio playback is allowed.
+    var audio = document.getElementById('vinylAudio');
+    var btn   = document.getElementById('vinylBtn');
+    if(audio && audio.paused){ if(btn){ btn.click(); } else { audio.play().catch(function(){}); } }
+    setTimeout(function(){ html.classList.add('intro-done'); if(intro.parentNode) intro.parentNode.removeChild(intro); }, 1000);
+  }
+  intro.addEventListener('click', enter);
 })();
 </script>
 <script src="spa.js" defer></script>
