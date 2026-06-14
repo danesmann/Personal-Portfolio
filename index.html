@@ -1,0 +1,542 @@
+
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[YOUR NAME] — Creative Marketing Executive</title>
+<style>
+  @font-face {
+    font-family: 'Orpheus Pro';
+    src: url('mqaidz91-Orpheus-Pro.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('mqaie9wl-Pretendard-Light.otf') format('opentype');
+    font-weight: 300;
+    font-display: swap;
+  }
+  :root {
+    /* light mode — white paper, black ink */
+    --bg:      oklch(13% 0 0);
+    --surface: oklch(18% 0 0);
+    --fg:      oklch(97% 0 0);
+    --muted:   oklch(68% 0 0);
+    --border:  oklch(97% 0 0);
+    --accent:  oklch(58% 0.24 264);
+    --gold:    oklch(68% 0 0);
+    --font-display: 'Orpheus Pro', 'Iowan Old Style', 'Charter', Georgia, serif;
+    --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+  }
+  html { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  /* — nav ———————————————————————— */
+  nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+        padding: 1.5rem 2.5rem; font-family: var(--font-mono); font-size: 0.75rem;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        border-bottom: 1px solid var(--border); position: sticky; top: 0;
+        background: var(--bg); z-index: 100; }
+  nav .logo { height: 28px; width: auto; flex-shrink: 0; justify-self: start; }
+  .nav-links { display: flex; gap: 2rem; align-items: center; justify-self: end; }
+  nav a { transition: color 0.2s; }
+  nav a:hover { color: var(--accent); }
+
+  /* — vinyl music player (center of nav) — */
+  .vinyl-player { position: relative; justify-self: center; width: 105.6px; height: 30px; }
+  .vinyl-player audio { display: none; }
+  /* disc IMAGE overlaps the nav and hangs below WITHOUT growing the bar */
+  .vinyl { position: absolute; left: 50%; top: 1px; z-index: 2; width: 105.6px; height: 105.6px;
+           padding: 0; border: 0; background: none; border-radius: 50%; cursor: pointer;
+           filter: drop-shadow(0 10px 24px rgba(0,0,0,0.55));
+           transform: translateX(-50%);
+           transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+  .vinyl-disc { display: block; width: 100%; height: 100%; border-radius: 50%;
+    object-fit: cover;
+    animation: vinyl-spin 3.4s linear infinite; animation-play-state: paused; }
+  .vinyl-player.playing .vinyl-disc { animation-play-state: running; }
+  @keyframes vinyl-spin { to { transform: rotate(360deg); } }
+
+  .vinyl-player:hover .vinyl { transform: translateX(-50%) translateY(16px);
+    animation: vinyl-float 2.6s ease-in-out 0.45s infinite; }
+  @keyframes vinyl-float {
+    0%,100% { transform: translateX(-50%) translateY(16px); }
+    50%     { transform: translateX(-50%) translateY(26px); } }
+
+  .vinyl-arrow { position: absolute; top: 0; left: 50%; z-index: 1; width: 66px; height: 66px;
+    margin: 0 0 0 -33px; padding: 0; border: 0; background: none; cursor: pointer; color: #fff;
+    display: grid; place-items: center; opacity: 0; pointer-events: none;
+    transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s; }
+  .vinyl-arrow svg { width: 54px; height: 54px; display: block;
+    filter: drop-shadow(1.5px 0 0 #000) drop-shadow(-1.5px 0 0 #000) drop-shadow(0 1.5px 0 #000) drop-shadow(0 -1.5px 0 #000); }
+  .vinyl-player:hover .vinyl-arrow { opacity: 1; pointer-events: auto; }
+  .vinyl-player:hover .vinyl-arrow.prev { transform: translate(-84px, 42px); }
+  .vinyl-player:hover .vinyl-arrow.next { transform: translate(84px, 42px); }
+  .vinyl-player:hover .vinyl-arrow.prev:hover { transform: translate(-92px, 42px) scale(1.15); }
+  .vinyl-player:hover .vinyl-arrow.next:hover { transform: translate(92px, 42px) scale(1.15); }
+
+  /* — hero ——————————————————————— */
+  .hero { padding: 6rem 2.5rem 4rem; border-bottom: 1px solid var(--border);
+          position: relative; overflow: hidden; }
+  .hero h1 { font-family: var(--font-display); font-weight: 400;
+             font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1.08;
+             letter-spacing: -0.02em; max-width: 900px; position: relative; z-index: 1; }
+  .hero h1 em { font-style: italic; }
+  .hero h1 .red { color: var(--accent); }
+  .hero .sub { margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem;
+               text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .hero .fish { position: absolute; right: calc(-2% + 50px); top: 50%; transform: translateY(-50%);
+                width: clamp(225px, 27.5vw, 425px); height: auto; pointer-events: none;
+                opacity: 0.9; }
+
+  /* — work table ————————————————— */
+  .work { padding: 0 2.5rem; }
+  .work-header { display: flex; justify-content: space-between; align-items: baseline;
+                 padding: 2.5rem 0 1.5rem; border-bottom: 1px solid var(--border);
+                 font-family: var(--font-mono); font-size: 0.7rem;
+                 text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .row { display: grid;
+         grid-template-columns: 2.5rem 1fr 1fr 6rem;
+         align-items: center; gap: 1rem;
+         padding: 0.85rem 0;
+         cursor: pointer;
+         transition: padding 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                     background 0.25s; }
+  .work-item:hover .row { padding: 1.2rem 0.5rem; background: var(--surface); }
+  .row .idx { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+  .row .name { font-family: var(--font-display); font-size: 1.15rem;
+               transition: color 0.2s; }
+  .work-item:hover .row .name { color: var(--accent); }
+  .row .cat { font-family: var(--font-mono); font-size: 0.7rem;
+              text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .row .year { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted);
+               text-align: right; }
+
+  /* — dropdown expand —————————————— */
+  .work-item { border-bottom: 1px solid var(--border); }
+  .row { border-bottom: none; }
+  .row-expand {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .work-item:hover .row-expand {
+    grid-template-rows: 1fr;
+  }
+  .row-dropdown {
+    overflow: hidden;
+  }
+  .dropdown-inner {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr 1fr 6rem;
+    gap: 1rem;
+    padding: 0 0.5rem 1.2rem;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.35s 0.08s, transform 0.35s 0.08s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .dropdown-media {
+    grid-column: 1 / 3;
+  }
+  .dropdown-text {
+    grid-column: 3 / 5;
+  }
+  .work-item:hover .dropdown-inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .dropdown-media {
+    display: flex;
+    gap: 0.75rem;
+    height: clamp(100px, 12vw, 160px);
+  }
+  .dropdown-img {
+    height: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .dropdown-img.landscape {
+    aspect-ratio: 8/3;
+  }
+  .dropdown-img.square {
+    aspect-ratio: 1/1;
+  }
+  .dropdown-text {
+    display: flex;
+    align-items: center;
+  }
+  .dropdown-text p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--muted);
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  /* — responsive dropdown ————————— */
+  @media (max-width: 768px) {
+    .dropdown-inner {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 0 0 1rem;
+    }
+    .dropdown-media {
+      height: clamp(80px, 20vw, 120px);
+    }
+  }
+
+  /* — wavy band ———————————————— */
+  .wavy-band { width: 100%; background: oklch(8% 0 0); overflow: hidden;
+               display: flex; align-items: center; justify-content: center;
+               padding: 2rem 0; margin-top: 1rem; }
+  .wavy-band img { width: 100%; height: auto; display: block; min-width: 900px; }
+
+  /* — footer ————————————————————— */
+  footer { display: flex; justify-content: space-between; align-items: baseline;
+           padding: 2rem 2.5rem; border-top: 1px solid var(--border);
+           font-family: var(--font-mono); font-size: 0.7rem;
+           text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  footer .links { display: flex; gap: 2rem; }
+  footer a { transition: color 0.2s; }
+  footer a:hover { color: var(--accent); }
+
+  /* — responsive ——————————————— */
+  @media (max-width: 1024px) {
+    .hero { overflow: visible; }
+    .hero .fish { position: static; transform: none; display: block;
+                  margin: 2rem auto 0; width: 220px; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero { padding: 4rem 1.5rem 3rem; }
+    .hero h1 { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+    .hero .fish { width: 160px; }
+    .work { padding: 0 1.5rem; }
+    .row { grid-template-columns: 2rem 1fr 5rem; }
+    .row .cat { display: none; }
+    .wavy-band { padding: 1rem 0; }
+    .wavy-band img { min-width: 600px; }
+    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  }
+
+  /* — accent-sync: top stripe + active link + smooth transitions — */
+  nav { border-top: 3px solid var(--accent); }
+  nav a.active { color: var(--accent); }
+  .hero h1 .red { transition: color 0.45s ease; }
+  nav a, footer a { transition: color 0.45s ease; }
+  .row .name { transition: color 0.45s ease; }
+</style>
+</head>
+<body>
+
+<!-- ——— NAV ——— -->
+<nav>
+  <img class="logo" src="mqaj3roz-logo-light.svg" alt="Logo">
+  <div class="vinyl-player" id="vinylPlayer" data-accentsync="1" data-prefix="" aria-label="Background music">
+    <button class="vinyl-arrow prev" id="vinylPrev" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="vinyl" id="vinylBtn" type="button" aria-label="Play or pause music"><img class="vinyl-disc" id="vinylDisc" src="mqcvrf67-song-1.png" alt="Vinyl record"></button>
+    <button class="vinyl-arrow next" id="vinylNext" type="button" aria-label="Next track"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <audio id="vinylAudio" preload="auto"></audio>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">[Work]</a>
+    <a href="about.html">[About]</a>
+    <a href="fun.html">[Fun]</a>
+  </div>
+</nav>
+<div id="view" data-route="home">
+
+<!-- ——— INFINITE GRID (drag) ——— -->
+<style>
+  nav{ transition: background .45s ease, border-color .45s ease; }
+  nav.over-grid{ background:linear-gradient(to bottom, rgba(10,10,11,.62) 0%, rgba(10,10,11,.30) 52%, rgba(10,10,11,0) 100%) !important; border-bottom-color:transparent !important; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+  .gridhero{ position:relative; width:100%; height:120vh; min-height:672px; background:#0a0a0b;
+    border-top:1px solid rgba(255,255,255,.08); border-bottom:1px solid rgba(255,255,255,.08); overflow:hidden; }
+  .gridhero #gridCanvas{ position:absolute; inset:0; display:block; width:100%; height:100%;
+    cursor:grab; touch-action:pan-y; opacity:0; transition:opacity .8s ease; }
+  .gridhero.ready #gridCanvas{ opacity:1; }
+  .gridhero.grabbing #gridCanvas{ cursor:grabbing; }
+  .gridhero .gh-hud{ position:absolute; inset:0; pointer-events:none; z-index:2; }
+  .gridhero .gh-l{ position:absolute; font-family:var(--font-mono); font-size:11px;
+    letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+  .gridhero .gh-title{ top:1.6rem; left:2.5rem; }
+  .gridhero .gh-tag{ left:2.5rem; bottom:1.8rem; display:flex; align-items:center; gap:10px; }
+  .gridhero .gh-tag .d{ width:30px; height:30px; border:1px solid rgba(255,255,255,.22);
+    border-radius:50%; display:grid; place-items:center; color:#f2f2f2; }
+  .gridhero .gh-tag .d svg{ width:15px; height:15px; }
+  .gridhero .gh-scroll{ right:2.5rem; bottom:1.8rem; display:flex; align-items:center; gap:8px; }
+  .gridhero .gh-scroll svg{ width:13px; height:13px; animation:gh-bob 1.8s ease-in-out infinite; }
+  @keyframes gh-bob{ 0%,100%{ transform:translateY(-2px) } 50%{ transform:translateY(2px) } }
+  @media (max-width:768px){ .gridhero{ height:94vh; }
+    .gridhero .gh-title{ left:1.5rem } .gridhero .gh-tag{ left:1.5rem } .gridhero .gh-scroll{ right:1.5rem } }
+</style>
+<section class="gridhero" id="gridhero" aria-label="Selected work — drag to explore">
+  <canvas id="gridCanvas"></canvas>
+  </section>
+
+<!-- ——— HERO ——— -->
+<section class="hero">
+  <h1><em>Creative</em> marketing builds <span class="red">brand&nbsp;worlds</span> that move people&nbsp;&amp;&nbsp;markets.</h1>
+  <p class="sub"></p>
+  <img class="fish" src="mqakh83w-Fish-Icon-index.png" alt="" aria-hidden="true">
+</section>
+
+
+
+<!-- ——— WORK ——— -->
+<section class="work">
+  <div class="work-header">
+    <span>Selected work</span>
+    <span>[01–08]</span>
+  </div>
+  <div class="work-item">
+    <a class="row" href="lubylab/index.html">
+      <span class="idx">01</span>
+      <span class="name">Lubylab</span>
+      <span class="cat">Product, Branding, Marketing, Repositioning</span>
+      <span class="year">2026</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Led the complete brand repositioning of Lubylab, transforming a traditional laboratory supplier into a modern, innovation-driven brand. My role spanned product strategy, visual identity, and go-to-market planning. The key insight: customers don't buy equipment — they invest in research outcomes. This reframing guided every decision, from the confident new wordmark to messaging that speaks to scientific ambition rather than specs. The result is a cohesive system bridging institutional credibility with the forward energy needed to attract a new generation of researchers.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="red/index.html">
+      <span class="idx">02</span>
+      <span class="name">Born In Red</span>
+      <span class="cat">Photography, Story Telling</span>
+      <span class="year">2025</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Directed the visual narrative for Born In Red, a photography-driven project exploring cultural identity through everyday rituals. My role centered on art direction and editorial sequencing — curating images into a cohesive arc that felt intimate without becoming sentimental. The critical insight was letting silence do the work: restraining captions, letting compositions breathe, and trusting viewers to find their own meaning. Each image was selected not for individual impact but for how it converses with its neighbors, creating rhythm and emotional pacing across the full series.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="faebeauty/index.html">
+      <span class="idx">03</span>
+      <span class="name">Fae Beauty</span>
+      <span class="cat">Branding, Marketing Plans</span>
+      <span class="year">2025</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Developed the brand identity and marketing strategy for Fae Beauty, an emerging cosmetics brand at the intersection of clean beauty and self-expression. My role involved crafting the visual language, tone of voice, and a phased go-to-market plan targeting Gen Z through social-first channels. The insight that shaped everything: beauty marketing had become either clinical or chaotic — Fae needed a third path. We built a brand that feels like a trusted friend who happens to know chemistry, balancing ingredient transparency with playful creativity across every touchpoint from packaging to content.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="tet/index.html">
+      <span class="idx">04</span>
+      <span class="name">Lucky Money</span>
+      <span class="cat">Illustration, Merchandise</span>
+      <span class="year">2025</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Created the illustration system and merchandise collection for Lucky Money, a Lunar New Year project celebrating red envelope traditions through contemporary design. My role spanned concept development, illustration, and production oversight for a limited merchandise run. The guiding insight: tradition and modernity aren't opposites — they're layers. Rather than modernizing motifs beyond recognition, I preserved their symbolic structure while introducing a vibrant graphic style that feels at home on both a family altar and an Instagram feed, bridging generational aesthetics without diluting cultural meaning.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="celavie/index.html">
+      <span class="idx">05</span>
+      <span class="name">Celavie</span>
+      <span class="cat">Brand System, Product Design</span>
+      <span class="year">2024</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Designed the comprehensive brand system and product experience for Celavie, a wellness brand focused on intentional living. My role covered foundational identity through to packaging and digital product design. The central insight: most wellness brands default to minimalism as shorthand for calm, creating a sea of indistinguishable beige. Celavie's system instead uses structured warmth — deliberate typography pairings, a restrained but distinctive palette, and tactile packaging details that reward close attention. The result communicates serenity through craft and precision rather than emptiness.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="meritxmas/index.html">
+      <span class="idx">06</span>
+      <span class="name">Merit Christmas</span>
+      <span class="cat">Illustration, Merchandise, Charity Works</span>
+      <span class="year">2024</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Led creative direction for Merit Christmas, a holiday charity initiative combining original illustration with limited-edition merchandise to fund education programs. My role encompassed illustration, product design, and campaign strategy. The key insight was treating charity merchandise as real design, not an afterthought. By applying the same rigor to a fundraiser as a commercial launch — thoughtful compositions, quality materials, considered packaging — we created items people genuinely wanted to own and gift. This approach tripled engagement compared to previous campaigns, proving generosity and good taste are natural allies.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="mandala/index.html">
+      <span class="idx">07</span>
+      <span class="name">Mandala Hotel</span>
+      <span class="cat">Branding, Illustration</span>
+      <span class="year">2023</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Created the brand identity and bespoke illustration suite for Mandala Hotel, a boutique property drawing on Southeast Asian heritage. My role bridged strategic positioning and hands-on illustration — developing a visual language honoring traditional craft while meeting contemporary luxury expectations. The defining insight: heritage branding fails when it becomes costume. Instead of surface-level cultural motifs, I studied mandala geometry's structural principles and wove them into the grid system, typography spacing, and illustration compositions. The identity feels rooted without being nostalgic, giving the hotel a visual voice as layered as its context.</p>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="work-item">
+    <a class="row" href="tedxbuv/index.html">
+      <span class="idx">08</span>
+      <span class="name">TEDxBUV</span>
+      <span class="cat">Website, Social Designs</span>
+      <span class="year">2023</span>
+    </a>
+    <div class="row-expand"><div class="row-dropdown"><div class="dropdown-inner">
+      <div class="dropdown-media">
+        <div class="dropdown-img landscape">8:3 hero</div>
+        <div class="dropdown-img square">Logo</div>
+      </div>
+      <div class="dropdown-text">
+        <p>Designed the event website and social media visual system for TEDxBUV, the independently organized TED conference at our university. My role covered digital experience design and campaign visuals across multiple platforms. The central insight: TEDx events often default to borrowing TED's visual authority rather than building their own voice. I designed a system respecting TED's guidelines while carving a distinct identity — bold typographic treatments, a dynamic color system tied to speaker themes, and social templates flexible enough for the volunteer team to maintain consistency without a designer present at every step.</p>
+      </div>
+    </div></div></div>
+  </div>
+</section>
+
+<!-- ——— WAVY BAND ——— -->
+<section class="wavy-band" aria-hidden="true">
+  <img src="mqal1ucq-bot-bar.svg" alt="">
+</section>
+
+<!-- ——— FOOTER ——— -->
+</div>
+<footer>
+  <span>&copy; 2026 Thanh Lam</span>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/thanhlam-buv" target="_blank" rel="noopener">[LinkedIn]</a>
+    <a href="mailto:thanhlamforwork2807@gmail.com">[Email]</a>
+    <a href="https://drive.google.com/drive/folders/12X5mnUws8-BsiJN9JzWf6oW5LsI40Dzw?usp=sharing" target="_blank" rel="noopener">[Resume]</a>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+  var player = document.getElementById('vinylPlayer');
+  if(!player) return;
+  var audio = document.getElementById('vinylAudio');
+  var disc  = document.getElementById('vinylDisc');
+  var btn   = document.getElementById('vinylBtn');
+  var prevB = document.getElementById('vinylPrev');
+  var nextB = document.getElementById('vinylNext');
+  var prefix = player.getAttribute('data-prefix') || '';
+  var ABASE = new URL(prefix || './', document.baseURI).href;
+  var accentSync = player.hasAttribute('data-accentsync');
+  var TRACKS  = ['mqcvhr5w-song-_1_.mp3','mqcwbdz2-song-_2_.mp3','mqcvhqyz-song-_3_.mp3'];
+  var COVERS  = ['mqcvrf67-song-1.png','mqcvrf55-song-2.png','mqcvrf24-song-3.png'];
+  var ACCENTS = ['#2b69ff','#af001a','#ee7092'];
+  var KEY = 'portfolio-music';
+
+  function read(){ try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ return {}; } }
+  function write(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
+
+  var st = read();
+  var idx = (st.idx >= 0 && st.idx < TRACKS.length) ? st.idx : 0;
+  var resumeTime = st.time || 0;
+  var wantPlay = !!st.playing;
+
+  function applyTrack(){
+    audio.src = new URL(TRACKS[idx], ABASE).href;
+    if(disc) disc.src = new URL(COVERS[idx], ABASE).href;
+    if(accentSync){ document.documentElement.style.setProperty('--accent', ACCENTS[idx]); }
+  }
+  applyTrack();
+
+  audio.addEventListener('loadedmetadata', function(){
+    if(resumeTime){ try { audio.currentTime = resumeTime; } catch(e){} resumeTime = 0; }
+  });
+  function sync(){ player.classList.toggle('playing', !audio.paused); }
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+
+  function persist(){ write({ idx: idx, playing: !audio.paused, time: audio.currentTime || 0 }); }
+
+  btn.addEventListener('click', function(){
+    if(audio.paused){ audio.play().catch(function(){}); } else { audio.pause(); }
+    persist();
+  });
+
+  function skip(d){
+    idx = (idx + d + TRACKS.length) % TRACKS.length;
+    resumeTime = 0;
+    applyTrack();
+    try { audio.currentTime = 0; } catch(e){}
+    audio.play().catch(function(){});
+    wantPlay = true;
+    persist();
+  }
+  nextB.addEventListener('click', function(e){ e.stopPropagation(); skip(1); });
+  prevB.addEventListener('click', function(e){ e.stopPropagation(); skip(-1); });
+  audio.addEventListener('ended', function(){ skip(1); });
+
+  var lastSave = 0;
+  audio.addEventListener('timeupdate', function(){
+    var n = Date.now(); if(n - lastSave > 1500){ lastSave = n; persist(); }
+  });
+  window.addEventListener('pagehide', persist);
+
+  if(wantPlay){ audio.play().then(sync).catch(sync); } else { sync(); }
+})();
+</script>
+
+<!-- ——— INFINITE GRID (lazy-mounted by spa.js on the home view) ——— -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="grid.js"></script>
+<script src="spa.js" defer></script>
+</body></html>

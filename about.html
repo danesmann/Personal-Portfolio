@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[YOUR NAME] — About</title>
+<style>
+  @font-face {
+    font-family: 'Orpheus Pro';
+    src: url('mqaidz91-Orpheus-Pro.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('mqaie9wl-Pretendard-Light.otf') format('opentype');
+    font-weight: 300;
+    font-display: swap;
+  }
+  :root {
+    --bg:      oklch(13% 0 0);
+    --surface: oklch(18% 0 0);
+    --fg:      oklch(97% 0 0);
+    --muted:   oklch(68% 0 0);
+    --border:  oklch(97% 0 0);
+    --accent:  oklch(58% 0.24 264);
+    --font-display: 'Orpheus Pro', 'Iowan Old Style', 'Charter', Georgia, serif;
+    --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+  }
+  html { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  /* — nav — */
+  nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+        padding: 1.5rem 2.5rem; font-family: var(--font-mono); font-size: 0.75rem;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        border-bottom: 1px solid var(--border); position: sticky; top: 0;
+        background: var(--bg); z-index: 100; }
+  nav .logo { height: 28px; width: auto; flex-shrink: 0; justify-self: start; }
+  .nav-links { display: flex; gap: 2rem; align-items: center; justify-self: end; }
+  nav a { transition: color 0.2s; }
+  nav a:hover { color: var(--accent); }
+
+  /* — vinyl music player (center of nav) — */
+  .vinyl-player { position: relative; justify-self: center; width: 105.6px; height: 30px; }
+  .vinyl-player audio { display: none; }
+  /* disc IMAGE overlaps the nav and hangs below WITHOUT growing the bar */
+  .vinyl { position: absolute; left: 50%; top: 1px; z-index: 2; width: 105.6px; height: 105.6px;
+           padding: 0; border: 0; background: none; border-radius: 50%; cursor: pointer;
+           filter: drop-shadow(0 10px 24px rgba(0,0,0,0.55));
+           transform: translateX(-50%);
+           transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+  .vinyl-disc { display: block; width: 100%; height: 100%; border-radius: 50%;
+    object-fit: cover;
+    animation: vinyl-spin 3.4s linear infinite; animation-play-state: paused; }
+  .vinyl-player.playing .vinyl-disc { animation-play-state: running; }
+  @keyframes vinyl-spin { to { transform: rotate(360deg); } }
+
+  .vinyl-player:hover .vinyl { transform: translateX(-50%) translateY(16px);
+    animation: vinyl-float 2.6s ease-in-out 0.45s infinite; }
+  @keyframes vinyl-float {
+    0%,100% { transform: translateX(-50%) translateY(16px); }
+    50%     { transform: translateX(-50%) translateY(26px); } }
+
+  .vinyl-arrow { position: absolute; top: 0; left: 50%; z-index: 1; width: 66px; height: 66px;
+    margin: 0 0 0 -33px; padding: 0; border: 0; background: none; cursor: pointer; color: #fff;
+    display: grid; place-items: center; opacity: 0; pointer-events: none;
+    transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s; }
+  .vinyl-arrow svg { width: 54px; height: 54px; display: block;
+    filter: drop-shadow(1.5px 0 0 #000) drop-shadow(-1.5px 0 0 #000) drop-shadow(0 1.5px 0 #000) drop-shadow(0 -1.5px 0 #000); }
+  .vinyl-player:hover .vinyl-arrow { opacity: 1; pointer-events: auto; }
+  .vinyl-player:hover .vinyl-arrow.prev { transform: translate(-84px, 42px); }
+  .vinyl-player:hover .vinyl-arrow.next { transform: translate(84px, 42px); }
+  .vinyl-player:hover .vinyl-arrow.prev:hover { transform: translate(-92px, 42px) scale(1.15); }
+  .vinyl-player:hover .vinyl-arrow.next:hover { transform: translate(92px, 42px) scale(1.15); }
+  nav a.active { color: var(--accent); }
+
+  /* — page header — */
+  .page-header { padding: 6rem 2.5rem 3rem; border-bottom: 1px solid var(--border); }
+  .page-header h1 { font-family: var(--font-display); font-weight: 400;
+                     font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.1;
+                     letter-spacing: -0.02em; }
+
+  /* — about content — */
+  .about-content { max-width: 1280px; margin: 0 auto; padding: 3.5rem 2.5rem 5rem; }
+
+  /* — layout: sticky avatar | divider | long-scroll text (mirrors the work-page split) — */
+  .about-layout { display: grid; grid-template-columns: minmax(220px, 30%) 1px 1fr;
+                  gap: 0 3.5rem; align-items: start; }
+
+  .about-photo { position: sticky; top: 6.5rem; }
+  .about-photo figure { margin: 0; aspect-ratio: 2 / 3; border: 1px solid var(--border);
+                        background: var(--surface); position: relative; overflow: hidden;
+                        display: grid; place-items: center; }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-photo .photo-ph { position: absolute; inset: 0; display: grid; place-items: center; }
+  .about-photo .photo-ph::before { content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in oklch, var(--fg) 7%, transparent) 14px 15px); }
+  .about-photo .photo-ph span { font-family: var(--font-mono); font-size: 0.72rem;
+                                color: var(--muted); position: relative; padding: 0 1rem; text-align: center; }
+  .about-photo figcaption { margin-top: 0.7rem; font-family: var(--font-mono);
+                            font-size: 0.68rem; text-transform: uppercase;
+                            letter-spacing: 0.07em; color: var(--muted); }
+
+  .about-divider { width: 1px; align-self: stretch; background: var(--border); }
+
+  /* — right column: all copy in one scroll — */
+  .about-text { min-width: 0; }
+  .about-block + .about-block { margin-top: 3.5rem; padding-top: 3.5rem;
+    border-top: 1px solid color-mix(in oklch, var(--border) 25%, transparent); }
+  .about-block h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem;
+                    margin-bottom: 1.2rem; letter-spacing: -0.01em; }
+  .about-block p { color: var(--muted); max-width: 62ch; line-height: 1.7; font-size: 0.95rem; }
+  .about-block p + p { margin-top: 1rem; }
+
+  .stats { display: flex; gap: 3rem; margin-top: 2.5rem;
+           font-family: var(--font-mono); font-size: 0.7rem;
+           text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .stats .num { display: block; font-size: 1.8rem; color: var(--fg);
+                font-family: var(--font-display); font-weight: 400;
+                margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .cap-item { padding: 1.2rem 0; border-bottom: 1px solid color-mix(in oklch, var(--border) 25%, transparent); }
+  .cap-item h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.15rem;
+                  margin-bottom: 0.4rem; }
+  .cap-item p { font-size: 0.85rem; color: var(--muted); max-width: 400px; line-height: 1.6; }
+
+  .xp-row { display: grid; grid-template-columns: 9rem 1fr auto; gap: 1.2rem;
+            padding: 1rem 0; align-items: baseline;
+            border-bottom: 1px solid color-mix(in oklch, var(--border) 25%, transparent); }
+  .xp-row .when { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+  .xp-row .role b { font-weight: 600; font-size: 0.95rem; display: block; }
+  .xp-row .role span { font-size: 0.84rem; color: var(--muted); }
+  .xp-row .org { font-family: var(--font-mono); font-size: 0.72rem;
+                  text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* — footer — */
+  footer { display: flex; justify-content: space-between; align-items: baseline;
+           padding: 2rem 2.5rem; border-top: 1px solid var(--border); margin-top: 4rem;
+           font-family: var(--font-mono); font-size: 0.7rem;
+           text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  footer .links { display: flex; gap: 2rem; }
+  footer a { transition: color 0.2s; }
+  footer a:hover { color: var(--accent); }
+
+  /* — responsive — */
+  @media (max-width: 900px) {
+    .about-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-divider { display: none; }
+    .about-photo { position: static; max-width: 300px; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .page-header { padding: 4rem 1.5rem 2rem; }
+    .about-content { padding: 3rem 1.5rem 4rem; }
+    .cap-grid { grid-template-columns: 1fr; }
+    .xp-row { grid-template-columns: 1fr; gap: 0.2rem; }
+    .stats { flex-wrap: wrap; gap: 2rem; }
+    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  }
+
+  /* — accent-sync — */
+  nav { border-top: 3px solid var(--accent); transition: border-color 0.45s ease; }
+  nav a, footer a { transition: color 0.45s ease; }
+</style>
+</head>
+<body>
+
+<nav>
+  <img class="logo" src="mqaj3roz-logo-light.svg" alt="Logo">
+  <div class="vinyl-player" id="vinylPlayer" data-accentsync="1" data-prefix="" aria-label="Background music">
+    <button class="vinyl-arrow prev" id="vinylPrev" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="vinyl" id="vinylBtn" type="button" aria-label="Play or pause music"><img class="vinyl-disc" id="vinylDisc" src="mqcvrf67-song-1.png" alt="Vinyl record"></button>
+    <button class="vinyl-arrow next" id="vinylNext" type="button" aria-label="Next track"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <audio id="vinylAudio" preload="auto"></audio>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">[Work]</a>
+    <a href="about.html" class="active">[About]</a>
+    <a href="fun.html">[Fun]</a>
+  </div>
+</nav>
+<div id="view" data-route="about">
+
+<section class="page-header">
+  <h1>About</h1>
+</section>
+
+<div class="about-content">
+  <div class="about-layout">
+
+    <div class="about-photo">
+      <figure>
+        <!-- Replace .photo-ph with: <img src="YOUR-FILE.png" alt="[Your Name]"> -->
+        <div class="photo-ph"><span>YOUR PHOTO — 2:3 PORTRAIT</span></div>
+      </figure>
+      <figcaption>[Your Name]</figcaption>
+    </div>
+
+    <div class="about-divider" aria-hidden="true"></div>
+
+    <div class="about-text">
+
+      <section class="about-block">
+        <h2>Background</h2>
+        <p>
+          [2-3 sentences about your background, philosophy, and what drives your work.
+          Replace this placeholder with real copy -- an honest stub beats a fake bio.]
+        </p>
+        <p>
+          [Second paragraph: what you believe about brand-building, the kinds of
+          clients/categories you've worked across, your approach to creative leadership.]
+        </p>
+        <div class="stats">
+          <div><span class="num">--</span> Years experience</div>
+          <div><span class="num">--</span> Brands built</div>
+          <div><span class="num">--</span> Awards</div>
+        </div>
+      </section>
+
+      <section class="about-block">
+        <h2>Philosophy</h2>
+        <p>
+          [What you believe about the intersection of marketing and design.
+          How you approach building brand worlds. Your point of view on what makes
+          creative work effective -- not just beautiful.]
+        </p>
+        <p>
+          [Optional: personal note -- where you're based, what you do outside work,
+          how your diverse skill set came together.]
+        </p>
+      </section>
+
+      <section class="about-block">
+        <h2>Capabilities</h2>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h3>Brand Strategy</h3>
+            <p>[Positioning, naming, brand architecture, competitive analysis -- replace with your specifics.]</p>
+          </div>
+          <div class="cap-item">
+            <h3>Creative Direction</h3>
+            <p>[Campaign concepting, art direction, visual systems, tone of voice -- replace with your specifics.]</p>
+          </div>
+          <div class="cap-item">
+            <h3>Photography</h3>
+            <p>[Product, lifestyle, campaign stills, post-production direction -- replace with your specifics.]</p>
+          </div>
+          <div class="cap-item">
+            <h3>Film &amp; Directing</h3>
+            <p>[Commercial, brand film, social content, production oversight -- replace with your specifics.]</p>
+          </div>
+          <div class="cap-item">
+            <h3>Campaign Planning</h3>
+            <p>[Integrated campaigns, media strategy, launch sequencing, budgets -- replace with your specifics.]</p>
+          </div>
+          <div class="cap-item">
+            <h3>Design</h3>
+            <p>[Identity systems, packaging, key visuals, digital design -- replace with your specifics.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-block">
+        <h2>Experience</h2>
+        <div class="xp-row">
+          <span class="when">2023 -- now</span>
+          <div class="role"><b>[Title, e.g. Creative Marketing Director]</b><span>[One line on scope: team size, categories, remit.]</span></div>
+          <span class="org">[Company]</span>
+        </div>
+        <div class="xp-row">
+          <span class="when">2020 -- 2023</span>
+          <div class="role"><b>[Title]</b><span>[One line on scope.]</span></div>
+          <span class="org">[Company]</span>
+        </div>
+        <div class="xp-row">
+          <span class="when">2017 -- 2020</span>
+          <div class="role"><b>[Title]</b><span>[One line on scope.]</span></div>
+          <span class="org">[Company]</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+</div>
+<footer>
+  <span>&copy; 2026 Thanh Lam</span>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/thanhlam-buv" target="_blank" rel="noopener">[LinkedIn]</a>
+    <a href="mailto:thanhlamforwork2807@gmail.com">[Email]</a>
+    <a href="https://drive.google.com/drive/folders/12X5mnUws8-BsiJN9JzWf6oW5LsI40Dzw?usp=sharing" target="_blank" rel="noopener">[Resume]</a>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+  var player = document.getElementById('vinylPlayer');
+  if(!player) return;
+  var audio = document.getElementById('vinylAudio');
+  var disc  = document.getElementById('vinylDisc');
+  var btn   = document.getElementById('vinylBtn');
+  var prevB = document.getElementById('vinylPrev');
+  var nextB = document.getElementById('vinylNext');
+  var prefix = player.getAttribute('data-prefix') || '';
+  var ABASE = new URL(prefix || './', document.baseURI).href;
+  var accentSync = player.hasAttribute('data-accentsync');
+  var TRACKS  = ['mqcvhr5w-song-_1_.mp3','mqcwbdz2-song-_2_.mp3','mqcvhqyz-song-_3_.mp3'];
+  var COVERS  = ['mqcvrf67-song-1.png','mqcvrf55-song-2.png','mqcvrf24-song-3.png'];
+  var ACCENTS = ['#2b69ff','#af001a','#ee7092'];
+  var KEY = 'portfolio-music';
+
+  function read(){ try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ return {}; } }
+  function write(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
+
+  var st = read();
+  var idx = (st.idx >= 0 && st.idx < TRACKS.length) ? st.idx : 0;
+  var resumeTime = st.time || 0;
+  var wantPlay = !!st.playing;
+
+  function applyTrack(){
+    audio.src = new URL(TRACKS[idx], ABASE).href;
+    if(disc) disc.src = new URL(COVERS[idx], ABASE).href;
+    if(accentSync){ document.documentElement.style.setProperty('--accent', ACCENTS[idx]); }
+  }
+  applyTrack();
+
+  audio.addEventListener('loadedmetadata', function(){
+    if(resumeTime){ try { audio.currentTime = resumeTime; } catch(e){} resumeTime = 0; }
+  });
+  function sync(){ player.classList.toggle('playing', !audio.paused); }
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+
+  function persist(){ write({ idx: idx, playing: !audio.paused, time: audio.currentTime || 0 }); }
+
+  btn.addEventListener('click', function(){
+    if(audio.paused){ audio.play().catch(function(){}); } else { audio.pause(); }
+    persist();
+  });
+
+  function skip(d){
+    idx = (idx + d + TRACKS.length) % TRACKS.length;
+    resumeTime = 0;
+    applyTrack();
+    try { audio.currentTime = 0; } catch(e){}
+    audio.play().catch(function(){});
+    wantPlay = true;
+    persist();
+  }
+  nextB.addEventListener('click', function(e){ e.stopPropagation(); skip(1); });
+  prevB.addEventListener('click', function(e){ e.stopPropagation(); skip(-1); });
+  audio.addEventListener('ended', function(){ skip(1); });
+
+  var lastSave = 0;
+  audio.addEventListener('timeupdate', function(){
+    var n = Date.now(); if(n - lastSave > 1500){ lastSave = n; persist(); }
+  });
+  window.addEventListener('pagehide', persist);
+
+  if(wantPlay){ audio.play().then(sync).catch(sync); } else { sync(); }
+})();
+</script>
+<script src="spa.js" defer></script>
+</body></html>

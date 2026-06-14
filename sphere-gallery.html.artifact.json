@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "sphere-gallery.html",
+  "entry": "sphere-gallery.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-06-13T22:14:41.496Z",
+  "updatedAt": "2026-06-13T22:14:41.496Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

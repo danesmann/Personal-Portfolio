@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "tedxbuv/index.html",
+  "entry": "tedxbuv/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-06-13T20:40:01.189Z",
+  "updatedAt": "2026-06-13T20:40:01.189Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

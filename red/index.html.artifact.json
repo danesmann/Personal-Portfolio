@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "red/index.html",
+  "entry": "red/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-06-13T20:40:01.136Z",
+  "updatedAt": "2026-06-13T20:40:01.136Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

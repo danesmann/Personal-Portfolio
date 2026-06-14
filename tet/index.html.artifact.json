@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "tet/index.html",
+  "entry": "tet/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-06-13T20:40:01.261Z",
+  "updatedAt": "2026-06-13T20:40:01.261Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
