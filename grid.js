@@ -20,18 +20,18 @@
     var navEl = document.querySelector('nav');
 
     var CARDS = [
-      {n:'Lubylab',          c:'Product · Branding · Marketing', y:'2026', img:'mqat8jvs-image.png'},
-      {n:'Born In Red',      c:'Photography · Story Telling',    y:'2025', img:'mqapvoij-image.png'},
-      {n:'Fae Beauty',       c:'Branding · Marketing',           y:'2025', img:'mqapt6sv-image.png'},
-      {n:'Lucky Money',      c:'Illustration · Merch',           y:'2025', img:'mqapbk31-image.png'},
-      {n:'Celavie',          c:'Brand System · Product',         y:'2024', img:'mqansfkf-image.png'},
+      {n:'Lubylab',          c:'Product · Branding · Marketing', y:'2026', img:'lubylab.jpg'},
+      {n:'Born In Red',      c:'Photography · Story Telling',    y:'2025', img:'born-in-red.jpg'},
+      {n:'Fae Beauty',       c:'Branding · Marketing',           y:'2025', img:'fae-beauty.jpg'},
+      {n:'Lucky Money',      c:'Illustration · Merch',           y:'2025', img:'lucky-money.jpg'},
+      {n:'Celavie',          c:'Brand System · Product',         y:'2024', img:'celavie.jpg'},
       {n:'Merit Christmas',  c:'Illustration · Charity',         y:'2024', img:'mqam66yh-image.png'},
       {n:'Mandala Hotel',    c:'Branding · Illustration',        y:'2023', img:'mqam5heg-image.png'},
-      {n:'TEDxBUV',          c:'Website · Social',               y:'2023', img:'mqam0tkj-image.png'},
+      {n:'TEDxBUV',          c:'Website · Social',               y:'2023', img:'tedxbuv.jpg'},
       {n:'Photography',      c:'Personal Series',                y:'2024', img:'mqalzjp6-image.png'},
       {n:'Academic Research',c:'Environmental Eng.',             y:'2023', img:'mqal6g6n-image.png'},
-      {n:'AI Art',           c:'Generative',                     y:'2025', img:'mqakzst8-image.png'},
-      {n:'3D Objects',       c:'Modeling · Render',              y:'2025', img:'mqakltaw-image.png'}
+      {n:'Biolotus',         c:'Branding · OOH Design · Misc.',   y:'2025', img:'mqakzst8-image.png'},
+      {n:'3D Objects',       c:'Modeling · Render',              y:'2025', img:'3d-objects.jpg'}
     ];
     var COLS=4, ROWS=3, CW=512, CH=512;
 
@@ -73,7 +73,7 @@
     renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
     renderer.setClearColor(0x0a0a0b,1);
     if(THREE.sRGBEncoding!==undefined) renderer.outputEncoding=THREE.sRGBEncoding;
-    var D=10, OVER=1.5;
+    var D=10, OVER=1.5, CELLSCALE=1.2;   // CELLSCALE: cell-size multiplier (1.2 = +20%)
     var camera=new THREE.PerspectiveCamera(42,1,0.1,100); camera.position.z=D;
     var scene=new THREE.Scene();
     var geo=new THREE.PlaneGeometry(1,1,60,60);
@@ -83,7 +83,7 @@
       vertexShader:
         'varying vec2 vUv; uniform float uCurve;'+
         'void main(){ vUv=uv; vec3 p=position; vec2 c=uv*2.0-1.0;'+
-        ' p.z -= uCurve*dot(c,c);'+
+        ' p.z += uCurve*dot(c,c);'+
         ' gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0); }',
       fragmentShader:
         'precision highp float; varying vec2 vUv; uniform sampler2D uAtlas;'+
@@ -105,7 +105,7 @@
       var tanH=Math.tan(camera.fov*Math.PI/360);
       var viewH=2*D*tanH, viewW=viewH*camera.aspect;
       mesh.scale.set(viewW*OVER, viewH*OVER, 1);
-      var cellsX = camera.aspect<0.9 ? 4 : (camera.aspect<1.5?6:7);
+      var cellsX = (camera.aspect<0.9 ? 4 : (camera.aspect<1.5?6:7)) / CELLSCALE;
       var cellAspect=CW/CH;
       var cellWv=viewW/cellsX, cellHv=cellWv/cellAspect, rowsV=viewH/cellHv;
       baseRX=(cellsX*OVER)/COLS; baseRY=(rowsV*OVER)/ROWS;
@@ -114,6 +114,7 @@
 
     var off={x:0,y:0}, mom={x:0,y:0}, dragging=false, held=false, lx=0, ly=0, live=0;
     var curve=0, zoom=1, prevRX=baseRX*1, prevRY=baseRY*1;
+    var tiltX=0, tiltY=0, tiltTX=0, tiltTY=0;
     function down(e){ dragging=true; held=true; section.classList.add('grabbing'); lx=e.clientX; ly=e.clientY; mom.x=mom.y=0;
       try{ canvas.setPointerCapture(e.pointerId); }catch(_){ } }
     function move(e){
@@ -138,7 +139,7 @@
       io=new IntersectionObserver(function(es){ visible=es[0].isIntersecting; },{threshold:0.01});
       io.observe(section);
     }
-    var MAXCURVE=1.6, MAXZOOM=0.12, MAXSPEED=0.05;
+    var BASECURVE=1.6, DRAGCURVE=2.2, MAXZOOM=0.35, MAXSPEED=0.07, MAXTILT=0.06;
     function frame(){
       if(disposed) return;
       rafId=requestAnimationFrame(frame);
@@ -147,7 +148,7 @@
         if(Math.abs(mom.x)<1e-6)mom.x=0; if(Math.abs(mom.y)<1e-6)mom.y=0; }
       var sp = dragging? live : Math.hypot(mom.x,mom.y);
       live*=0.85;
-      var curveT = held ? MAXCURVE : 0, zoomT = held ? (1+MAXZOOM) : 1;
+      var curveT = held ? DRAGCURVE : BASECURVE, zoomT = held ? (1+MAXZOOM) : 1;
       curve+=(curveT-curve)*0.08; zoom+=(zoomT-zoom)*0.08;
       repX=baseRX*zoom; repY=baseRY*zoom;
       off.x+=0.5*(prevRX-repX); off.y+=0.5*(prevRY-repY);
@@ -155,12 +156,17 @@
       uni.uOffset.value.set(off.x,off.y);
       uni.uRepeat.value.set(repX,repY);
       uni.uCurve.value=curve;
-      if(pIn && !dragging){
+      if(pIn){
         var rc=canvas.getBoundingClientRect();
         var sx=(ppx-rc.left)/(rc.width||1), sy=(ppy-rc.top)/(rc.height||1);
-        var pu=0.5+(sx-0.5)/OVER, pv=0.5+((1.0-sy)-0.5)/OVER;
-        uni.uHoverCell.value.set(Math.floor((pu*repX+off.x)*COLS), Math.floor((pv*repY+off.y)*ROWS));
-      } else { uni.uHoverCell.value.set(1e6,1e6); }
+        tiltTY=-(sx-0.5)*2*MAXTILT; tiltTX=-(sy-0.5)*2*MAXTILT;   // subtle wiggle: grid leans toward the cursor
+        if(!dragging){
+          var pu=0.5+(sx-0.5)/OVER, pv=0.5+((1.0-sy)-0.5)/OVER;
+          uni.uHoverCell.value.set(Math.floor((pu*repX+off.x)*COLS), Math.floor((pv*repY+off.y)*ROWS));
+        } else { uni.uHoverCell.value.set(1e6,1e6); }
+      } else { tiltTX=tiltTY=0; uni.uHoverCell.value.set(1e6,1e6); }
+      tiltX+=(tiltTX-tiltX)*0.08; tiltY+=(tiltTY-tiltY)*0.08;
+      mesh.rotation.x=tiltX; mesh.rotation.y=tiltY;
       renderer.render(scene,camera);
     }
     rafId=requestAnimationFrame(frame);
